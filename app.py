@@ -6,15 +6,15 @@ from fuzzywuzzy import process
 
 app = Flask(__name__)
 
-dbFile = open('/Users/ashish.amar/Documents/Ideathon Chatbot/RSI-Ideathon-POC/db.json')
-data = json.load(dbFile)
+with open('db.json', 'rt') as dbFile:
+    data = json.load(dbFile)
 
 def calculateFuzzyRatios(originalRecord, frontEndInput):
     similarityRatio = fuzz.ratio(originalRecord, frontEndInput)
     tokenSortRatio = fuzz.token_sort_ratio(originalRecord, frontEndInput)
     averageRatio = sum([similarityRatio, tokenSortRatio])/2
     print("Average Ratio::", averageRatio, "Original Question:: ", originalRecord)
-    if(averageRatio > 80):
+    if(averageRatio >= 78):
         return True
 
 @app.route('/')
