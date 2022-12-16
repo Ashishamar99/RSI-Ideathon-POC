@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -20,6 +20,17 @@ def index():
 @app.route('/getAllData', methods=['GET'])
 def getAllData():
     return jsonify({"DataFromDB":data})
+
+@app.route('/ask/', methods=['GET'])
+def getAnswer():
+    question = request.data.decode()
+    notExists = True
+    for item in data:
+        if question==item["question"]:
+            notExists = False
+            return item["answer"]
+    if notExists:
+        return "New Question, please wait for support to answer"
 
 if __name__ =="__main__":
     app.run(debug=True)
