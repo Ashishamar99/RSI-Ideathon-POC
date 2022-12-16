@@ -1,17 +1,10 @@
 from flask import Flask, jsonify, request
+import json
 
 app = Flask(__name__)
 
-data = [
-    {
-        'question': 'What are the policies of the organization ?',
-        'answer': 'In the box URL'
-    },
-    {
-        'question': 'Where is the holiday calendar stored ?',
-        'answer': 'In the box URL'
-    }
-        ]
+dbFile = open('/Users/ashish.amar/Documents/Ideathon Chatbot/RSI-Ideathon-POC/db.json')
+data = json.load(dbFile)
 
 def notifyCSupport(question):
     print("Customer Support will update from here.")
