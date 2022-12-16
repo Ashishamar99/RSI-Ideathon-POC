@@ -3,11 +3,15 @@ import json
 import fuzzywuzzy
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
+import os
 
 app = Flask(__name__)
 
-with open('db.json', 'rt') as dbFile:
-    data = json.load(dbFile)
+print('db.json' in os.listdir('.'))
+if 'db.json' in os.listdir('.'):
+    fullPath = os.path.join(os.getcwd(), 'db.json')
+    with open(fullPath, 'rt') as dbFile:
+        data = json.load(dbFile)
 
 def calculateFuzzyRatios(originalRecord, frontEndInput):
     similarityRatio = fuzz.ratio(originalRecord, frontEndInput)
