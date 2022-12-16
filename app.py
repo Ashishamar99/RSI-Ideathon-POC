@@ -3,7 +3,7 @@ import json
 
 app = Flask(__name__)
 
-dbFile = open('/Users/ashish.amar/Documents/Ideathon Chatbot/RSI-Ideathon-POC/db.json')
+dbFile = open('RSI-Ideathon-POC/db.json')
 data = json.load(dbFile)
 
 def notifyCSupport(question):
