@@ -1,13 +1,24 @@
 from flask import Flask, jsonify, request
 import json
+import fuzzywuzzy
+from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
 
 app = Flask(__name__)
 
-dbFile = open('RSI-Ideathon-POC/db.json')
+dbFile = open('/Users/ashish.amar/Documents/Ideathon Chatbot/RSI-Ideathon-POC/db.json')
 data = json.load(dbFile)
 
 def notifyCSupport(question):
     print("Customer Support will update from here.")
+
+def calculateFuzzyRatios(originalRecord, frontEndInput):
+    similarityRatio = fuzz.ratio(originalRecord, frontEndInput)
+    tokenSortRatio = fuzz.token_sort_ratio(originalRecord, frontEndInput)
+    averageRatio = sum([similarityRatio, tokenSortRatio])/2
+    print("Average Ratio::", averageRatio, "Question:: ", originalRecord)
+    if(averageRatio > 80):
+        return True
 
 @app.route('/')
 def index():
@@ -23,9 +34,10 @@ def getAllData():
 def getAnswer():
     question = request.data.decode()
     question = question.strip()
+    question = question.lower()
     notExists = True
     for item in data:
-        if question==item["question"]:
+        if calculateFuzzyRatios(item["question"].lower(), question.lower()):
             notExists = False
             return item["answer"]
     if notExists:
