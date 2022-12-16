@@ -9,14 +9,11 @@ app = Flask(__name__)
 dbFile = open('/Users/ashish.amar/Documents/Ideathon Chatbot/RSI-Ideathon-POC/db.json')
 data = json.load(dbFile)
 
-def notifyCSupport(question):
-    print("Customer Support will update from here.")
-
 def calculateFuzzyRatios(originalRecord, frontEndInput):
     similarityRatio = fuzz.ratio(originalRecord, frontEndInput)
     tokenSortRatio = fuzz.token_sort_ratio(originalRecord, frontEndInput)
     averageRatio = sum([similarityRatio, tokenSortRatio])/2
-    print("Average Ratio::", averageRatio, "Question:: ", originalRecord)
+    print("Average Ratio::", averageRatio, "Original Question:: ", originalRecord)
     if(averageRatio > 80):
         return True
 
@@ -41,11 +38,7 @@ def getAnswer():
             notExists = False
             return item["answer"]
     if notExists:
-        newQuestionTemplate = {"question": question,
-                                "answer": "Yet to answer"}
-        data.append(newQuestionTemplate)
-        notifyCSupport(question)
-        return "New Question, please wait for customer support to answer"
+        return "I'm sorry, but it looks like the message you have sent is not in a recognizable language or beyond my knowledge. Can you please provide a question or statement in a language that I can understand so that I can better assist you?"
 
 if __name__ =="__main__":
     app.run(debug=True)
