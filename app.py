@@ -13,6 +13,9 @@ data = [
     }
         ]
 
+def notifyCSupport(question):
+    print("Customer Support will update from here.")
+
 @app.route('/')
 def index():
     return "Welcome to /"
@@ -24,13 +27,18 @@ def getAllData():
 @app.route('/ask/', methods=['GET'])
 def getAnswer():
     question = request.data.decode()
+    question = question.strip()
     notExists = True
     for item in data:
         if question==item["question"]:
             notExists = False
             return item["answer"]
     if notExists:
-        return "New Question, please wait for support to answer"
+        newQuestionTemplate = {"question": question,
+                                "answer": "Yet to answer"}
+        data.append(newQuestionTemplate)
+        notifyCSupport(question)
+        return "New Question, please wait for customer support to answer"
 
 if __name__ =="__main__":
     app.run(debug=True)
