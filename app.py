@@ -40,7 +40,8 @@ def getAnswer():
     for item in data:
         if calculateFuzzyRatios(item["question"].lower(), question.lower()):
             notExists = False
-            return item["answer"]
+            response = jsonify({"answer":item["answer"], "link":item["link"]})
+            return response
     if notExists:
         return "I'm sorry, but it looks like the message you have sent is not in a recognizable language or beyond my knowledge. Can you please provide a question or statement in a language that I can understand so that I can better assist you?"
 
