@@ -45,4 +45,4 @@ def getAnswer():
         return "I'm sorry, but it looks like the message you have sent is not in a recognizable language or beyond my knowledge. Can you please provide a question or statement in a language that I can understand so that I can better assist you?"
 
 if __name__ =="__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=4005, debug=True)
