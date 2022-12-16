@@ -15,7 +15,9 @@ def index():
 
 @app.route('/getAllData', methods=['GET'])
 def getAllData():
-    return jsonify({"DataFromDB":data})
+    response = jsonify({"DataFromDB":data})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 @app.route('/ask/', methods=['GET'])
 def getAnswer():
