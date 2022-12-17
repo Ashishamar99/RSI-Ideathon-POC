@@ -33,7 +33,8 @@ def getAllData():
 
 @app.route('/ask/', methods=['GET'])
 def getAnswer():
-    question = request.data.decode()
+    question = request.args.get('question')
+    # question = request.data.decode()
     question = question.strip()
     question = question.lower()
     notExists = True
@@ -41,6 +42,7 @@ def getAnswer():
         if calculateFuzzyRatios(item["question"].lower(), question.lower()):
             notExists = False
             response = jsonify({"answer":item["answer"], "link":item["link"]})
+            response.headers.add("Access-Control-Allow-Origin", "*")
             return response
     if notExists:
         return "I'm sorry, but it looks like the message you have sent is not in a recognizable language or beyond my knowledge. Can you please provide a question or statement in a language that I can understand so that I can better assist you?"
