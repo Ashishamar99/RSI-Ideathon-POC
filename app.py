@@ -4,8 +4,11 @@ import fuzzywuzzy
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 import os
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 print('db.json' in os.listdir('.'))
 if 'db.json' in os.listdir('.'):
@@ -18,7 +21,7 @@ def calculateFuzzyRatios(originalRecord, frontEndInput):
     tokenSortRatio = fuzz.token_sort_ratio(originalRecord, frontEndInput)
     averageRatio = sum([similarityRatio, tokenSortRatio])/2
     print("Average Ratio::", averageRatio, "Original Question:: ", originalRecord)
-    if(averageRatio >= 78):
+    if(averageRatio >= 85):
         return True
 
 @app.route('/')
@@ -26,6 +29,7 @@ def index():
     return "Welcome to /"
 
 @app.route('/getAllData', methods=['GET'])
+@cross_origin()
 def getAllData():
     response = jsonify({"DataFromDB":data})
     response.headers.add("Access-Control-Allow-Origin", "*")
@@ -45,7 +49,9 @@ def getAnswer():
             response.headers.add("Access-Control-Allow-Origin", "*")
             return response
     if notExists:
-        return "I'm sorry, but it looks like the message you have sent is not in a recognizable language or beyond my knowledge. Can you please provide a question or statement in a language that I can understand so that I can better assist you?"
+        response = jsonify({"answer":"I'm sorry, but it looks like the message you have sent is not in a recognizable language or beyond my knowledge. Can you please provide a question or statement in a language that I can understand so that I can better assist you?", "link":"No Link Found"})
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return response
 
 if __name__ =="__main__":
     app.run(host='0.0.0.0', port=4005, debug=True)
