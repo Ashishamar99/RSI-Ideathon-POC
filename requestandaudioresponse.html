@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make request and get response in autdio</title>
+
+    <script>
+        function fetchnload(){
+            question = document.getElementById("question").value;
+            console.log(question);
+            //"http://mayadak.pythonanywhere.com/ask?question=what is rakuten"
+            //http://127.0.0.1:4005/ask?question=what is rakuten
+            fetch("http://127.0.0.1:4005/ask?question=" + question,
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'text/plain'
+                },
+                method: 'GET',
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                //data.link will have link of audio file.
+                const answer = data.answer;
+                console.log(answer);
+                let speakData = new SpeechSynthesisUtterance();
+                speakData.text = answer;
+                speakData.lang = 'en';
+                speechSynthesis.speak(speakData);
+            })
+            .catch(function(error){console.error(error)})
+        }
+    </script>
+
+</head>
+<body>
+    <input type="text" id="question"/>
+    <button onclick="fetchnload()">fetch</button>
+    <script src="https://code.jquery.com/jquery-3.6.2.js" integrity="sha256-pkn2CUZmheSeyssYw3vMp1+xyub4m+e+QK4sQskvuo4=" crossorigin="anonymous"></script>
+</body>
+</html>
